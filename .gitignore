@@ -30,3 +30,6 @@ tree.txt
 .DS_Store
 Thumbs.db
 
+# jmeter
+apache-jmeter-*
+*.jmx

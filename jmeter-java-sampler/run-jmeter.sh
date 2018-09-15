@@ -1,19 +1,49 @@
 #! /bin/bash
 
-# change it to your jmeter path
-JMETER_HOME=$HOME/apache-jmeter-4.0.1
+BASEDIR=$(cd "$(dirname "$0")"; pwd)
+cd "${BASEDIR}"
 
-if [ ! -d "${JMETER_HOME}/lib/ext/" ]; then
+WORKDIR=$(cd "${BASEDIR}/.."; pwd)
+cd "${WORKDIR}"
+
+JMETER=apache-jmeter-4.0
+
+if [ ! -d "${JMETER}" ]; then
+    if [ ! -f "${JMETER}.zip" ]; then
+        # download it
+        wget https://archive.apache.org/dist/jmeter/binaries/${JMETER}.zip
+    fi
+    unzip ${JMETER}.zip
+fi
+
+JMETER_HOME=$WORKDIR/$JMETER
+
+# check it again
+if [ ! -d "${JMETER_HOME}/lib/" ]; then
     echo
     echo "Invalid JMETER_HOME: ${JMETER_HOME}"
     exit 1;
 fi
 
+cd "${BASEDIR}"
 mvn -U clean package -DskipTests -e
 
 if [ $? = 0 ]; then
-    cp -f target/*.jar ${JMETER_HOME}/lib/ext/
-    cp -f target/lib/*.jar ${JMETER_HOME}/lib/ext/
+    echo "maven build success."
+    # copy to jmeter lib/ext/
+    #cp -f target/*.jar ${JMETER_HOME}/lib/ext/
+    #cp -f target/lib/*.jar ${JMETER_HOME}/lib/ext/
+else
+    echo "maven build failed."
+    exit 1;
 fi
 
+cd "${WORKDIR}"
+# add build & dependencies to jmeter search_paths,
+# it can be automatically finded by jmeter
+export JMETER_OPTS="-Dsearch_paths=${BASEDIR}/target;${BASEDIR}/target/lib"
+# if you wish to show with Chinese UI
+#export JMETER_LANGUAGE="-Duser.language=zh -Duser.region=CN"
+
+# start jmeter, default GUI mode
 sh ${JMETER_HOME}/bin/jmeter
