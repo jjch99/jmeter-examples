@@ -41,7 +41,7 @@ fi
 cd "${WORKDIR}"
 # add build & dependencies to jmeter search_paths,
 # it can be automatically finded by jmeter
-export JMETER_OPTS="-Dsearch_paths=${BASEDIR}/target;${BASEDIR}/target/lib"
+export JMETER_OPTS="-Dsearch_paths=${BASEDIR}/target"
 # if you want to display with Chinese UI, difault is English.
 #export JMETER_LANGUAGE="-Duser.language=zh -Duser.region=CN"
 

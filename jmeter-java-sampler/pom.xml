@@ -43,19 +43,43 @@
                 </configuration>
             </plugin>
             <plugin>
+                <!-- 将测试程序及依赖项打成一个fat-jar，方便分发 -->
+                <!-- jmeter/lib 目录下已有大量常用的jar包，这里只需要包含jmeter里没有的一些包 -->
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>fastjson,okhttp,okio</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/shade</outputDirectory>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.alibaba:fastjson</include>
+                                    <include>com.squareup.okhttp3:*</include>
+                                    <include>com.squareup.okio:*</include>
+                                </includes>
+                            </artifactSet>
+                            <!-- Spring各模块中有很多重名文件，需要合并
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.factories</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.handlers</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.schemas</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.tooling</resource>
+                                </transformer>
+                            </transformers>
+                            -->
                         </configuration>
                     </execution>
                 </executions>
