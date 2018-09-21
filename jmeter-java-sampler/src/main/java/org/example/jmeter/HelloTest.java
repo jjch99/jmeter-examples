@@ -15,9 +15,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * 测试类，每个线程将会创建一个测试类的实例。
+ */
 public class HelloTest implements JavaSamplerClient {
 
     private static final Logger logger = LoggerFactory.getLogger(HelloTest.class);
+
+    private static final AtomicLong threadCounter = new AtomicLong(0);
 
     private static final AtomicLong idIncrementer = new AtomicLong(0);
 
@@ -48,6 +53,7 @@ public class HelloTest implements JavaSamplerClient {
      */
     public void setupTest(JavaSamplerContext context) {
         logger.info("setupTest");
+        threadCounter.incrementAndGet();
 
         // 多个线程共享的静态变量，只设置一次
         idIncrementer.compareAndSet(0, context.getLongParameter("initialId"));
@@ -115,6 +121,10 @@ public class HelloTest implements JavaSamplerClient {
      */
     public void teardownTest(JavaSamplerContext context) {
         logger.info("teardownTest");
+        
+        if (threadCounter.decrementAndGet() <= 0) {
+            // 最后一个线程执行完毕，测试结束，可以做一些测试结束后的清理
+        }
     }
 
 }
