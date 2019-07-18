@@ -121,7 +121,7 @@ public class HelloTest implements JavaSamplerClient {
      */
     public void teardownTest(JavaSamplerContext context) {
         logger.info("teardownTest");
-        
+
         if (threadCounter.decrementAndGet() <= 0) {
             // 最后一个线程执行完毕，测试结束，可以做一些测试结束后的清理
         }
