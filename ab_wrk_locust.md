@@ -24,6 +24,7 @@ https://docs.locust.io/en/stable/index.html
 
 - [dstat](http://dag.wiee.rs/home-made/dstat/)  
 ```
+dstat -tlcymsrn --tcp 2 300
 dstat -tlcymsrn --tcp --nocolor --output dstat_$(hostname)_$(date "+%Y%m%d_%H%M%S").csv 2 300 >/dev/null 2>&1 &
 ```
 - [vjtop](https://github.com/vipshop/vjtools/tree/master/vjtop)
