@@ -30,8 +30,8 @@ http_load -p 200 -f 100000 urls.txt
 https://www.joedog.org/siege-home/
 
 ```
-siege -c 200 -r 500 -f urls.txt -i -b
-siege -c 200 -t 5   -f urls.txt -i -b
+siege -c 200 -r 500 urls.txt
+siege -c 200 -t 5M  urls.txt
 ```
 
 ## locust
