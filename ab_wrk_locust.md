@@ -20,9 +20,19 @@ wrk -t8 -c200 -d10m --latency URL
 
 http://acme.com/software/http_load/
 
+根据url列表进行测试：可用于根据线上access_log提取url，到线下进行测试
+```
+http_load -p 200 -f 100000 urls.txt 
+```
+
 ## siege
 
 https://www.joedog.org/siege-home/
+
+```
+siege -c 200 -r 500 -f urls.txt -i -b
+siege -c 200 -t 5   -f urls.txt -i -b
+```
 
 ## locust
 
